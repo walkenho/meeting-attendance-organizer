@@ -1,3 +1,7 @@
+ui:
+	poetry run streamlit run ui.py
+
+
 isort:
 	./bin/run-isort.sh
 
