@@ -32,3 +32,10 @@ def test_attendance_list_updates_correctly():
             }
         )
     ) == Attendancelist(participants={Person("lord crawfish")})
+
+
+def test_attendancelist_has_correct_n_attendees():
+    assert (
+        Attendancelist({Person("zaphod beeblebrox"), Person("ford prefix")}).n_attendees
+        == 2
+    )
