@@ -60,6 +60,10 @@ class Attendancelist:
 
         return Attendancelist({Person(name) for name in df[cname]})
 
+    @property
+    def n_attendees(self):
+        return len(self.participants)
+
     def to_df(self):
         return pd.DataFrame(
             [
