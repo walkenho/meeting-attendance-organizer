@@ -69,7 +69,7 @@ class Attendancelist:
             columns=["firstname", "lastname"],
         ).sort_values(by="firstname")
 
-    def to_file(self, filename: pathlib.PosixPath):
+    def save(self, filename: pathlib.PosixPath):
         if filename.suffix == ".xlsx":
             self.to_df().to_excel(filename, index=False)
         elif filename.suffix == ".csv":
@@ -78,6 +78,9 @@ class Attendancelist:
             raise ValueError(
                 "Unsupported filetype, please choose one of the following: .xlsx, .csv"
             )
+    
+    def to_file(self) -> str:
+        return self.to_df().to_csv(index=False).encode('utf-8')
 
     def update(self, other: "Attendancelist"):
         return Attendancelist(other.participants - self.participants)
