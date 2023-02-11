@@ -20,3 +20,6 @@ def test_find_multiple_finds_alls():
         Person(name="Ford Prefix"): {Person(name="Ford Prefix")},
         Person(name="Zaphod"): {Person(name="Zaphod Beeblebrox")},
     }
+
+def test_attendance_list_updates_correctly():
+    assert Attendancelist({Person('zaphod beeblebrox'), Person('ford prefix')}).update(Attendancelist({Person('zaphod beeblebrox'), Person('ford prefix'), Person('lord crawfish')})) == Attendancelist(participants={Person('lord crawfish')})
