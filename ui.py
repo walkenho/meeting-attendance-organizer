@@ -37,7 +37,7 @@ if task in (TASKS.TASK1.value, TASKS.TASK3.value):
                            "text/csv",
                            key='download-csv')
 
-if task == TASKS.TASK2.value:
+if task == TASKS.TASK1.value:
 
     separator = st.radio("What's your input file separator?", SEPARATORTYPES.keys())
 
@@ -50,9 +50,10 @@ if task == TASKS.TASK2.value:
             st.write(attendees.to_df())
 
         textinput = st.text_input("Who are you looking for? If you are looking for more than one, separate them by comma.")
-        people_to_find = [Person(attendee.strip()) for attendee in textinput.split(',')]
+        if textinput.strip():
+            people_to_find = [Person(attendee.strip()) for attendee in textinput.split(',')]
 
-        st.header("Search Results")
-        for k, v in attendees.find_multiple(people_to_find).items():
-            st.subheader(f"**{k.name}**")
-            st.markdown(f"{', '.join([a.name for a in v]) if v else 'Sorry, none found.'}")
+            st.header("Search Results")
+            for k, v in attendees.find_multiple(people_to_find).items():
+                st.subheader(f"**{k.name}**")
+                st.markdown(f"{', '.join([a.name for a in v]) if v else 'Sorry, none found.'}")
