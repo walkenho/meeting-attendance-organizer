@@ -33,3 +33,11 @@ def test__Person_firstname_is_extracted_correctly(name, firstname):
 )
 def test_Person_lastname_is_extracted_correctly(name, lastname):
     assert Person(name).lastname == lastname
+
+
+def test_whitespace_gets_deleted_from_edges_of_name():
+    assert Person(" zaphod beeblebrox ") == Person("zaphod beeblebrox")
+
+
+def test_multiple_whitespace_gets_correctly_deleted_from_inside_a_name():
+    assert Person("Zaphod  Beeblebrox") == Person("Zaphod Beeblebrox")
