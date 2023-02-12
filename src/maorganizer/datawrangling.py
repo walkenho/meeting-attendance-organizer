@@ -89,8 +89,8 @@ class Attendancelist:
     def update(self, other: "Attendancelist"):
         return Attendancelist(other.participants - self.participants)
 
-    def find(self, somebody: str):
+    def find(self, somebody: Person):
         return {p for p in self.participants if p.is_similar(somebody)}
 
-    def find_multiple(self, people: List[str]):
+    def find_multiple(self, people: List[Person]):
         return {p: self.find(p) for p in people}
