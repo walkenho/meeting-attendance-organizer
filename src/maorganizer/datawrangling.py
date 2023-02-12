@@ -17,7 +17,7 @@ class Person:
     name: str
 
     def __post_init__(self):
-        self.name = self.name.title()
+        self.name = ' '.join([namepart for namepart in self.name.strip().title().split(' ') if namepart])
 
     def __hash__(self):
         return hash(self.name)
