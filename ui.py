@@ -1,7 +1,7 @@
 import streamlit as st
 from enum import Enum
 
-from maorganizer.datawrangling import Attendancelist
+from maorganizer.datawrangling import Attendancelist, Person
 
 SEPARATORTYPES = {'TAB' : '\t', 'COMMA': ','}
 
@@ -18,19 +18,41 @@ st.title("Welcome to the Meeting Attendance Organizer!")
 task = st.radio("I would like to ...", [task.value for task in TASKS])
 
 if task in (TASKS.TASK1.value, TASKS.TASK3.value):
-    st.header("Upload your Attendee List")
-    separator = st.radio("Input file separator", SEPARATORTYPES.keys())
+    #st.markdown("## Upload your Attendee List")
+    separator = st.radio("What's your input file separator?", SEPARATORTYPES.keys())
 
     uploaded_file = st.file_uploader("Choose a file")
     if uploaded_file is not None:
         attendees = Attendancelist.load_from_file(uploaded_file, sep=SEPARATORTYPES.get(separator))
 
-        st.write(f"Successfully processed {uploaded_file.name}.")
-        st.write(f"Your event has {len(attendees)} attendees.")
+        st.info(f"INFO: Your event has {attendees.n_attendees}.")
+
+        show_processed_list = st.checkbox("Show me the processed list of attendees")
+        if show_processed_list:
+            st.write(attendees.to_df())
 
         st.download_button("Press to Download Results",
                            attendees.to_file(),
-                           f"attendees-{uploaded_file.name}",
+                           f"processed-attendees-{uploaded_file.name}",
                            "text/csv",
                            key='download-csv')
-        st.write(attendees.to_df())
+
+if task == TASKS.TASK2.value:
+
+    separator = st.radio("What's your input file separator?", SEPARATORTYPES.keys())
+
+    uploaded_file = st.file_uploader("Choose a file")
+    if uploaded_file is not None:
+        attendees = Attendancelist.load_from_file(uploaded_file, sep=SEPARATORTYPES.get(separator))
+
+        show_processed_list = st.checkbox("Show me the processed list of attendees")
+        if show_processed_list:
+            st.write(attendees.to_df())
+
+        textinput = st.text_input("Who are you looking for? If you are looking for more than one, separate them by comma.")
+        people_to_find = [Person(attendee.strip()) for attendee in textinput.split(',')]
+
+        st.header("Search Results")
+        for k, v in attendees.find_multiple(people_to_find).items():
+            st.subheader(f"**{k.name}**")
+            st.markdown(f"{', '.join([a.name for a in v]) if v else 'Sorry, none found.'}")
