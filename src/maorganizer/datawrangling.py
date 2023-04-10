@@ -7,9 +7,7 @@ import pandas as pd
 
 DATAFOLDER = Path().cwd() / "data"
 
-MONTH = "Feb"
-
-FILENAME = f"participants-Meetup-{MONTH}"
+NAMECOLUMN = "Name"
 
 
 @dataclass
@@ -17,7 +15,9 @@ class Person:
     name: str
 
     def __post_init__(self):
-        self.name = ' '.join([namepart for namepart in self.name.strip().title().split(' ') if namepart])
+        self.name = " ".join(
+            [namepart for namepart in self.name.strip().title().split(" ") if namepart]
+        )
 
     def __hash__(self):
         return hash(self.name)
@@ -38,27 +38,31 @@ class Person:
     def lastname(self):
         return " ".join(self.name.split(" ")[1:])
 
+    def name_contains(self, text) -> bool:
+        return text in self.name.lower()
+
 
 @dataclass
 class Attendancelist:
     participants: Set[Person]
 
+    def load_from_df(df, cname: str = NAMECOLUMN):
+        return Attendancelist({Person(name) for name in df[cname]})
+
     def load_from_file(
-        filename: pathlib.PosixPath, cname: str = "Name", sep: str = None
+        filename: pathlib.PosixPath, cname: str = NAMECOLUMN, sep: str = None
     ):
-        if sep:
-            df = pd.read_csv(filename, sep=sep)
-        elif filename.suffix in [".xlsx", ".xls"]:
+        if filename.suffix in [".xlsx", ".xls"]:
             df = pd.read_excel(filename)
         elif filename.suffix == ".csv":
-            df = pd.read_csv(filename)
+            df = pd.read_csv(filename, sep=sep)
         else:
             raise ValueError(
                 "Unsupported filetype, please specify a separator or choose one "
                 "of the following filetypes: .xlsx, .xls, .csv"
             )
 
-        return Attendancelist({Person(name) for name in df[cname]})
+        return Attendancelist.load_from_df(df, cname)
 
     @property
     def n_attendees(self):
@@ -82,15 +86,21 @@ class Attendancelist:
             raise ValueError(
                 "Unsupported filetype, please choose one of the following: .xlsx, .csv"
             )
-    
+
     def to_file(self) -> str:
-        return self.to_df().to_csv(index=False).encode('utf-8')
+        return self.to_df().to_csv(index=False).encode("utf-8")
 
     def update(self, other: "Attendancelist"):
         return Attendancelist(other.participants - self.participants)
 
-    def find(self, somebody: Person):
+    def find_person(self, somebody: Person):
         return {p for p in self.participants if p.is_similar(somebody)}
 
-    def find_multiple(self, people: List[Person]):
-        return {p: self.find(p) for p in people}
+    def find_people(self, people: List[Person]):
+        return {p: self.find_person(p) for p in people}
+
+    def find_word(self, word: str):
+        return {p for p in self.participants if p.name_contains(word.lower())}
+
+    def find_words(self, words: List[str]):
+        return {word: self.find_word(word) for word in words}
