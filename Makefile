@@ -1,5 +1,5 @@
 ui:
-	poetry run streamlit run ui.py
+	poetry run streamlit run app.py
 
 isort:
 	./bin/run-isort.sh
