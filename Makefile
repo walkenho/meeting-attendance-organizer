@@ -1,7 +1,6 @@
 ui:
 	poetry run streamlit run ui.py
 
-
 isort:
 	./bin/run-isort.sh
 
@@ -11,7 +10,9 @@ flake8:
 black:
 	./bin/run-black.sh
 
+tidy: isort black flake8
+
 test:
 	poetry run pytest
 
-prepare: isort black flake8 test
+prepare: tidy test

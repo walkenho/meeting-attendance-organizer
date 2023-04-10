@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.10"
 pandas = "^1.5.3"
 streamlit = "^1.17.0"
+openpyxl = "^3.1.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"
