@@ -1,5 +1,6 @@
 from maorganizer.datawrangling import Attendancelist, Person
 
+
 def test_attendancelist_finds_person_by_substring():
     assert Attendancelist(
         {Person("zaphod beeblebrox"), Person("ford prefix")}
