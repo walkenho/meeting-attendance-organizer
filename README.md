@@ -1,13 +1,13 @@
 ---
 title: Meeting Attendance Organizer
-emoji: 💻
+emoji: 📅
 colorFrom: purple
 colorTo: blue
 sdk: docker
 pinned: false
 ---
 
-# Meeting Attendance Organizer
+# 📅 Meeting Attendance Organizer
 
 This app fullfills a simple need: Take a list of names of people attending a meeting and peform one (or multiple) of the following tasks:
 
