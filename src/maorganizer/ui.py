@@ -29,7 +29,7 @@ def load_df_from_uploaded_data(filename, data, sep=None) -> pd.DataFrame:
     if Path(filename).suffix in EXCEL_EXTENSIONS:
         df = pd.read_excel(data)
     elif Path(filename).suffix in CSV_EXTENSIONS:
-        df = pd.read_csv(filename, sep=sep)
+        df = pd.read_csv(data, sep=sep)
     else:
         raise ValueError(
             f"Please choose one of the following extensions: {', '.join(ACCEPTED_EXTENSIONS)}"
