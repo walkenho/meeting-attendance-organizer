@@ -1,9 +1,17 @@
-# MAOrganizer - Meeting Attendance Organizer
+---
+title: Meeting Attendance Organizer
+emoji: 💻
+colorFrom: purple
+colorTo: blue
+sdk: docker
+pinned: false
+---
 
-An app to organize meeting attendants.
+# Meeting Attendance Organizer
 
-Currently planned functionality:
+This app fullfills a simple need: Take a list of names of people attending a meeting and peform one (or multiple) of the following tasks:
 
-* Split a list of attendants into first and lastnames.
-* Given a substring (for example first or last name), find all attendants in the list whose name includes this substring.
-* Given two attendance lists, produces a list of newly added attendants.
+* ✂️ Split their names into first name and surname
+* 👀 Compare two lists with each other and see who is new on the second list
+* 🔎 Find people in a list by either searching for their complete names or parts of their name
+* 💾 Write any of the results back out, so you can share it with others
