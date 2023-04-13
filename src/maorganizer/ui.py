@@ -27,7 +27,23 @@ class TASKS(str, Enum):
 
 def load_df_from_uploaded_data(filename, data, sep=None) -> pd.DataFrame:
     if Path(filename).suffix in EXCEL_EXTENSIONS:
-        df = pd.read_excel(data)
+        try:
+            df = pd.read_excel(data)
+        # If engine does not recognize excel as excel, it is likely to be
+        # a text format "disguised" as xls.
+        # (example: PyData Meeting files have .xls extension, but are in fact text files)
+        except ValueError as e:
+            if (
+                str(e)
+                == "Excel file format cannot be determined, you must specify an engine manually."
+            ):
+                st.info(
+                    f"Your {Path(filename).suffix} file does not seem to be an excel file.\\\n\\\n"
+                    "\- Trying to parse it as text file."
+                )
+                df = pd.read_csv(data, sep=sep)
+            else:
+                raise ValueError(e)
     elif Path(filename).suffix in CSV_EXTENSIONS:
         df = pd.read_csv(data, sep=sep)
     else:
@@ -49,30 +65,45 @@ def make_attendance_data_from_file_uploads(
 
 
 def load_data(uploaded_files) -> Tuple[Dict, bool]:
+    def _files_contain_csv(uploaded_files) -> bool:
+        return bool(
+            sum([Path(file.name).suffix in CSV_EXTENSIONS for file in uploaded_files])
+        )
+
     try:
         data = make_attendance_data_from_file_uploads(
             uploaded_files, sep=None, cname=NAMECOLUMN
         )
+
+    # let user specify file format, then retry loading
+    # Retry parsing after letting user manually specify separator and columnname.
+    # Display error **after** the input fields, so if manually specifying separator and columnname
+    # fixes the load issue, the error message disappears.
     except KeyError:
-        contains_csvs = sum(
-            [Path(file.name).suffix in CSV_EXTENSIONS for file in uploaded_files]
-        )
-        if contains_csvs:
-            separator = st.radio(
+        # Set separator if csv file present
+        if _files_contain_csv(uploaded_files):
+            seperator_key = st.radio(
                 "We detected text files in your input. What is their separator?",
                 sorted(SEPARATORTYPES.keys()),
             )
+            separator = SEPARATORTYPES[seperator_key]
+        else:
+            separator = None
 
-        namecolumn = st.text_input(
+        # Set columnname
+        columnname = st.text_input(
             "Column header of your file's name column", NAMECOLUMN
         )
+
         try:
             data = make_attendance_data_from_file_uploads(
-                uploaded_files, sep=SEPARATORTYPES[separator], cname=namecolumn
+                uploaded_files, sep=separator, cname=columnname
             )
         except KeyError:
             st.error(
-                f"We could not find a column {namecolumn} in your data. Please use the options above to specify your column separator and the column name of your name column."
+                f'We could not find a column "{columnname}" in your data.\\\n\\\n'
+                " Please use the options above to specify your column separator (if text/csv file)"
+                " and the column name of the column containing your attendees' names."
             )
             data = {}
 
@@ -115,11 +146,13 @@ def create_task_selector():
         st.markdown("❔ **Description:** Split a list of names into first and surname.")
     elif task == TASKS.COMPARE.value:
         st.markdown(
-            "❔ **Description:** Compare two attendee lists with each and find attendees who have recently joined."
+            "❔ **Description:** Compare two attendee lists with each"
+            " and find attendees who have recently joined."
         )
     elif task == TASKS.FIND.value:
         st.markdown(
-            "❔ **Description:** Find attendees in a list by either first name or surname or by substrings."
+            "❔ **Description:** Find attendees in a list by either first name"
+            " or surname or by substrings."
         )
     return task
 

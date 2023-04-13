@@ -5,12 +5,15 @@ from maorganizer.datawrangling import Person
 
 from maorganizer.ui import TASKS, render_xlsx_download_button, create_file_uploader, create_task_selector
 
+# all these beautiful emojis from https://emojidb.org/file-emojis
+
 st.title("📅 Meeting Attendance Organizer")
 st.markdown("This app fullfills a simple need: Take a list of names of people attending a meeting and peform one (or multiple) of the following tasks:")
 st.markdown("""* ✂️ Split their names into first name and surname\n* 👀 Compare two lists with each other and see who is new on the second list\n * 🔎 Find people in a list by either searching for their complete names or parts of their name\n * 💾 Write any of the results back out, so you can share it with others""")
 
 st.header("📂 Step 1: Upload your Files")
 st.markdown("Upload the file(s) containing your meeting attendees. The expected format is a single column containing the attendees' full names. If you column name is not Name, you will be able to specify the column name after uploading the data. Additional columns will be ignored.")
+
 
 meetings = {}
 meetings = create_file_uploader()
@@ -26,7 +29,6 @@ if meetings:
     if task == TASKS.SPLIT.value:
 
         filename = st.selectbox("Choose a file 📄", options=list(meetings.keys()), key=task)
-        #filename = render_file_selector(meetings, key=task)
 
         render_xlsx_download_button({'Full list of Attendees': meetings[filename]},
                                       filename=f"processed-attendees-{Path(filename).stem}.xlsx",
@@ -64,9 +66,14 @@ if meetings:
         with col2:
             filename_new = st.selectbox("Choose your updated file", options=set(meetings.keys()) - {filename_old})
 
-        listcomparison = (
-        {'Original List': meetings[filename_old],
-         'Updated List - Full': meetings[filename_new],
-         'Updated List - Only Updates': meetings[filename_old].update(meetings[filename_new])})
+        # filename_new gets automatically populated if there is more than one file
+        # so if there is none, it's because there is only a single file available and no options left for filename_new
+        if filename_new is None:
+            st.info("⬆ Please upload a second file. ⬆")
+        else:
+            listcomparison = (
+            {'Original List': meetings[filename_old],
+             'Updated List - Full': meetings[filename_new],
+             'Updated List - Only Updates': meetings[filename_old].update(meetings[filename_new])})
 
-        render_xlsx_download_button(listcomparison, filename=f"{Path(filename_old).stem}-updated.xlsx", key=TASKS.COMPARE.value+'download')
+            render_xlsx_download_button(listcomparison, filename=f"{Path(filename_old).stem}-updated.xlsx", key=TASKS.COMPARE.value+'download')
