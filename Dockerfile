@@ -17,7 +17,7 @@ WORKDIR /home/
 COPY pyproject.toml poetry.lock app.py README.md ./
 COPY src ./src/
 
-RUN poetry install 
+RUN poetry install --without dev
 
 EXPOSE 7860
 
