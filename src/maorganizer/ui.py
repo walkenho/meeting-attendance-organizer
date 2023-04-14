@@ -314,14 +314,15 @@ def render_intro() -> None:
     st.title("📅 Meeting Attendance Organizer")
     st.markdown(
         "This app fullfills a simple need: Take a list of names of people"
-        " attending a meeting and peform one (or multiple) of the following tasks:"
+        " attending a meeting and perform one (or more) of the following tasks:"
     )
     st.markdown(
-        "* ✂️ Split their names into first name and surname\n"
-        "* 👀 Compare two lists with each other and see who is new on the second list\n"
+        "* ✂️ Split attendee names into first name and surname.\n"
+        "* 👀 Compare two lists of attendees with each other and see"
+        " who is new on the second list.\n"
         "* 🔎 Find people in a list by either searching for their complete names or parts"
-        " of their name\n"
-        "* 💾 Write any of the results back out, so you can share it with others"
+        " of their name.\n"
+        "* 💾 Write any of the results back out, so you can share it with others."
     )
 
 
