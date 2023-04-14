@@ -10,10 +10,12 @@ pinned: false
 
 ![Meeting Attendance Organizer](ui.png)
 
-
+---
 # 📅 Meeting Attendance Organizer
 
-This app, which is currently [deployed live on Streamlit Cloud Community](https://walkenho-streamlit-meeting-attendance-o-srcmaorganizerui-djmdyv.streamlit.app/) fullfills a simple need: It lets users upload one or more lists of names of people attending a meeting and performs the following tasks:
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://walkenho-streamlit-meeting-attendance-o-srcmaorganizerui-djmdyv.streamlit.app/)
+
+This app, which [you can use on Streamlit Cloud Community](https://walkenho-streamlit-meeting-attendance-o-srcmaorganizerui-djmdyv.streamlit.app/) fullfills a simple need: It lets users upload one or more lists of names of people attending a meeting and performs the following tasks:
 
 * ✂️ Split attendee names into first name and surname.
 * 👀 Compare two lists of attendees with each other and see who is new on the second list.
