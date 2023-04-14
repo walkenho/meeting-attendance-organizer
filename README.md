@@ -1,13 +1,7 @@
----
-title: Meeting Attendance Organizer
-emoji: 📅
-colorFrom: purple
-colorTo: blue
-sdk: docker
-pinned: false
----
+
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://walkenho-streamlit-meeting-attendance-o-srcmaorganizerui-djmdyv.streamlit.app/)
 
+---
 ![Meeting Attendance Organizer](ui.png)
 
 ---
