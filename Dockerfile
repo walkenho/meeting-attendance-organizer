@@ -14,11 +14,11 @@ ENV POETRY_CACHE_DIR=/opt/.cache
 
 WORKDIR /home/
 
-COPY pyproject.toml poetry.lock app.py README.md ./
+COPY pyproject.toml poetry.lock README.md ./
 COPY src ./src/
 
 RUN poetry install --without dev
 
 EXPOSE 7860
 
-ENTRYPOINT ["poetry", "run", "streamlit", "run", "app.py", "--server.port", "7860"]
+ENTRYPOINT ["poetry", "run", "streamlit", "run", "src/maorganizer/ui.py", "--server.port", "7860"]

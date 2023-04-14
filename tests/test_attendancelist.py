@@ -4,7 +4,7 @@ from maorganizer.datawrangling import Attendancelist, Person
 def test_attendancelist_finds_person_by_substring():
     assert Attendancelist(
         {Person("zaphod beeblebrox"), Person("ford prefix")}
-    ).find_word("aph") == {Person("Zaphod Beeblebrox")}
+    ).find_by_string("aph") == {Person("Zaphod Beeblebrox")}
 
 
 def test_attendancelist_finds_person_by_namepart():

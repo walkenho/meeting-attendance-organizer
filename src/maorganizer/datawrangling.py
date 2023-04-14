@@ -5,6 +5,9 @@ from typing import List, Set
 
 import pandas as pd
 
+CSV_EXTENSIONS = [".csv", ".txt"]
+EXCEL_EXTENSIONS = [".xls", ".xlsx"]
+
 DATAFOLDER = Path().cwd() / "data"
 
 NAMECOLUMN = "Name"
@@ -46,15 +49,15 @@ class Person:
 class Attendancelist:
     participants: Set[Person]
 
-    def load_from_df(df, cname: str = NAMECOLUMN):
+    def from_df(df, cname: str = NAMECOLUMN):
         return Attendancelist({Person(name) for name in df[cname]})
 
-    def load_from_file(
+    def from_file(
         filename: pathlib.PosixPath, cname: str = NAMECOLUMN, sep: str = None
     ):
-        if filename.suffix in [".xlsx", ".xls"]:
+        if filename.suffix in EXCEL_EXTENSIONS:
             df = pd.read_excel(filename)
-        elif filename.suffix == ".csv":
+        elif filename.suffix in CSV_EXTENSIONS:
             df = pd.read_csv(filename, sep=sep)
         else:
             raise ValueError(
@@ -62,7 +65,7 @@ class Attendancelist:
                 "of the following filetypes: .xlsx, .xls, .csv"
             )
 
-        return Attendancelist.load_from_df(df, cname)
+        return Attendancelist.from_df(df, cname)
 
     @property
     def n_attendees(self):
@@ -99,8 +102,11 @@ class Attendancelist:
     def find_people(self, people: List[Person]):
         return {p: self.find_person(p) for p in people}
 
-    def find_word(self, word: str):
-        return {p for p in self.participants if p.name_contains(word.lower())}
+    def find_by_string(self, word: str, exact=False):
+        if exact:
+            return self.find_person(Person(word))
+        else:
+            return {p for p in self.participants if p.name_contains(word.lower())}
 
-    def find_words(self, words: List[str]):
-        return {word: self.find_word(word) for word in words}
+    def find_by_strings(self, to_be_found: List[str], exact=False):
+        return {tbf: self.find_by_string(tbf, exact=exact) for tbf in to_be_found}
