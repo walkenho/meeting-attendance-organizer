@@ -325,6 +325,13 @@ def render_intro() -> None:
         "* 💾 Write any of the results back out, so you can share it with others."
     )
 
+    with st.expander("⚠️ In case of any issue with this app..."):
+        st.markdown("... contact [Jessica on LinkedIn](https://www.linkedin.com/in/jessica-walkenhorst/)"
+                     " or file an issue in her [GitHub Repository](https://github.com/walkenho/meeting-attendance-organizer),"
+                     " where the code for this app is publicly available.")
+
+
+
 
 def main():
     render_intro()
