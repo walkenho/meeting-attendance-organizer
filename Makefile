@@ -1,5 +1,5 @@
 ui:
-	poetry run streamlit run app.py
+	poetry run streamlit run src/maorganizer/ui.py
 
 isort:
 	./bin/run-isort.sh
