@@ -62,7 +62,7 @@ class Attendancelist:
         else:
             raise ValueError(
                 "Unsupported filetype, please specify a separator or choose one "
-                "of the following filetypes: .xlsx, .xls, .csv"
+                f"of the following filetypes: {', '.join(EXCEL_EXTENSIONS+CSV_EXTENSIONS)}"
             )
 
         return Attendancelist.from_df(df, cname)
